@@ -4,6 +4,7 @@ import AddBookmark from './AddBookmark/AddBookmark';
 import BookmarkList from './BookmarkList/BookmarkList';
 import BookmarksContext from './BookmarksContext'
 import Nav from './Nav/Nav';
+import Rating from './Rating/Rating'
 import config from './config';
 import './App.css';
 
@@ -76,6 +77,7 @@ class App extends Component {
 				<div className='content' aria-live='polite'>
 					<Route path='/add-bookmark' component={AddBookmark} />
 					<Route exact path='/' component={BookmarkList} />
+          <Rating value={1} />
 				</div>
 			</BookmarksContext.Provider>
 			</main>
