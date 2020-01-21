@@ -30,3 +30,14 @@
   font-size: .8em;
   text-align: right;
 }
+
+.BookmarkItem__edit {
+  background: #eeeeee;
+  border: solid #aaaaaa 1px;
+  border-radius: 4px;
+  color: black;
+  font-size: 1.1em;
+  margin: 2px;
+  padding: 1.7px 12px;
+  text-decoration: none;
+}

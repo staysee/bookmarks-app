@@ -55,7 +55,7 @@ export default function BookmarkItem(props) {
 				{props.description}
 				</p>
 				<div className='BookmarkItem__buttons'>
-					<Link to={`/edit/${props.id}`}>Edit Bookmark</Link>
+					<Link className='BookmarkItem__edit' to={`/edit/${props.id}`}>Edit</Link>
 					<button
 						className='BookmarkItem__description'
 						onClick={() => {
