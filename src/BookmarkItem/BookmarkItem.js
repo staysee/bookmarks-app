@@ -101,6 +101,6 @@ BookmarkItem.propTypes = {
 			return new Error(`Invalid prop, ${propName} must be min length 5 and begin http(s)://. Validation failed.`);
 		}
 	},
-	rating: PropTypes.number,
-	description: PropTypes.string
+	description: PropTypes.string,
+	rating: PropTypes.number.isRequired
 }

@@ -5,6 +5,10 @@ import config from '../config'
 
 import './EditBookmark.css'
 
+const Required = () => (
+    <span className='AddBookmark__required'>*</span>
+  )
+
 class EditBookmark extends React.Component{
     static propTypes = {
         match: PropTypes.shape({
@@ -18,6 +22,7 @@ class EditBookmark extends React.Component{
     static contextType = BookmarksContext
 
     state = {
+        error: null,
         id: '',
         title: '',
         url: '',
@@ -27,17 +32,15 @@ class EditBookmark extends React.Component{
 
     componentDidMount(){
         const { bookmarkId } = this.props.match.params
-        fetch(config.API_ENDPOINT + `${bookmarkId}`,{
+        fetch(config.API_ENDPOINT + `/${bookmarkId}`,{
             method: 'GET',
             headers: {
                 'authorization': `Bearer ${config.API_KEY}`
             }
         })
         .then(res => {
-            if (!res.ok) {
-              return res.json().then(error => {
-                throw error
-              })
+            if (!res.ok){
+                return res.json().then(error => Promise.reject(error))
             }
             return res.json()
           })
@@ -78,12 +81,12 @@ class EditBookmark extends React.Component{
             }  
         })
         .then(res => {
-            if (!res.ok) {
-              return res.json().then(error => {
-                throw error
-              })
-            }
-            return res.json()
+            if (!res.ok)
+                return res.json().then(error => Promise.reject(error))
+        })
+        .then(() => {
+            this.context.updateBookmark(newBookmark)
+            this.props.history.push('/')
         })
         .catch(error => {
             console.error(error)
@@ -96,20 +99,24 @@ class EditBookmark extends React.Component{
     }
 
     render() {
-        const { title, url, description, rating } = this.state
+        const { error, title, url, description, rating } = this.state
         return (
             <section className='EditBookmark'>
                 <h2>Edit Bookmark</h2>
                 <form className='EditBookmark__form' onSubmit={this.handleSubmit}>
+                    <div className='EditBookmark__error' role='alert'>
+                        {error && <p>{error.message}</p>}
+                    </div>
                     <div>
                         <label htmlFor='title'>
                             Title
+                            {''}
+                            <Required />
                         </label>
                         <input
                             id="title"
                             type="text"
                             name="title"
-                            placeholder="Article Title"
                             required
                             value={title}
                             onChange={this.handleChangeTitle}
@@ -117,12 +124,13 @@ class EditBookmark extends React.Component{
 
                         <label htmlFor='url'>
                             URL
+                            {' '}
+                            <Required />
                         </label>
                         <input
                             id="url"
                             type="text"
                             name="url"
-                            placeholder="https://url.com"
                             required
                             value={url}
                             onChange={this.handleChangeUrl}
@@ -131,24 +139,23 @@ class EditBookmark extends React.Component{
                         <label htmlFor='description'>
                             Description
                         </label>
-                        <input
+                        <textarea
                             id="description"
-                            type="text"
                             name="description"
-                            placeholder="Article Description Here"
-                            required
                             value={description}
                             onChange={this.handleChangeDescription}
                         />
-
                         <label htmlFor='rating'>
                             Rating
+                            {' '}
+                            <Required />
                         </label>
                         <input
-                            id="rating"
-                            type="text"
+                            type="number"
                             name="rating"
-                            placeholder="5"
+                            id="rating"
+                            min='1'
+                            max='5'
                             required
                             value={rating}
                             onChange={this.handleChangeRating}
