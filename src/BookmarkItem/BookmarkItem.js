@@ -8,32 +8,23 @@ import './BookmarkItem.css';
 
 function deleteBookmarkRequest(bookmarkId, callback) {
 	fetch(config.API_ENDPOINT + `/${bookmarkId}`, {
-		method: 'DELETE',
-		headers: {
-			'content-type': 'application.json',
-			'authorization': `bearer ${config.API_KEY}`
-		}
+	  method: 'DELETE',
+	  headers: {
+		'content-type': 'application/json',
+		'authorization': `bearer ${config.API_KEY}`
+	  }
 	})
-	.then(res => {
-		if (!res.ok) {
-			// get the error message from the response
-			return res.json().then(error => {
-				//then throw it
-				throw error
-			})
-		}
-		return res.json()
-	})
-	.then(data => {
-		console.log({ data })
-		//call the callback when the request is successful
-		//this is where the App component can remove it from state
+	  .then(res => {
+		if (!res.ok)
+		  return res.json().then(error => Promise.reject(error))
+	  })
+	  .then(noContent => {
 		callback(bookmarkId)
-	})
-	.catch(error => {
+	  })
+	  .catch(error => {
 		console.error(error)
-	})
-}
+	  })
+  }
 
 export default function BookmarkItem(props) {
   return (
@@ -76,10 +67,15 @@ export default function BookmarkItem(props) {
 
 BookmarkItem.defaultProps = {
   rating: 1,
-  description: ''
+  description: '',
+  onClickDelete: () => {}
 }
 
 BookmarkItem.propTypes = {
+	id: PropTypes.oneOfType([
+		PropTypes.number,
+		PropTypes.string
+	]).isRequired,
 	title: PropTypes.string.isRequired,
 	url: (props, propName, componentName) => {
 		//get the value of the prop
@@ -102,5 +98,6 @@ BookmarkItem.propTypes = {
 		}
 	},
 	description: PropTypes.string,
-	rating: PropTypes.number.isRequired
+	rating: PropTypes.number.isRequired,
+	onClickDelete: PropTypes.func
 }

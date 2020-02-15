@@ -15,15 +15,10 @@ class App extends Component {
     error: null,
   };
 
-  // changePage = (page) => {
-  //   this.setState({ page })
-  // }
-
   setBookmarks = bookmarks => {
     this.setState({
       bookmarks,
-      error: null,
-      // page: 'list',
+      error: null
     })
   }
 
