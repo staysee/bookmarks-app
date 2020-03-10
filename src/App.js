@@ -85,7 +85,6 @@ class App extends Component {
 				<div className='content' aria-live='polite'>
 					<Route exact path='/' component={BookmarkList} />
 					<Route path='/add-bookmark' component={AddBookmark} />
-          {/* <Rating value={1} /> */}
           <Route path='/edit/:bookmarkId' component={EditBookmark} />
 				</div>
 			</BookmarksContext.Provider>
